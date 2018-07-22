@@ -1,0 +1,1 @@
+export const SET_GRID_COLORS = 'SET_GRID_COLORS'
