@@ -3,28 +3,37 @@ import Row from './Row'
 import theme from '../config/theme'
 import { connect } from 'react-redux'
 import { setGridColors } from '../redux/actions'
+import { func, string, arrayOf } from 'prop-types'
+import createValidPath from '../utils/createValidPath'
 
 class Grid extends React.Component {
-  initGridColors = () => {
+  static propTypes = {
+    setGridColors: func.isRequired,
+    gridColors: arrayOf(arrayOf(string))
+  }
+
+  _initGridColors = () => {
     const { rows, cols } = theme
+    const { setGridColors } = this.props
     let gridColors = []
     for (let i = 0; i < rows; i++) {
       gridColors.push(Array.from(Array(cols)))
       for (let j = 0; j < cols; j++) {
         if (i % 2 === 0 && j % 2 === 0) {
-          gridColors[i][j] = 'dark'
+          gridColors[i][j] = theme.colorDark
         } else if (i % 2 && j % 2) {
-          gridColors[i][j] = 'light'
+          gridColors[i][j] = theme.colorLight
         } else {
-          gridColors[i][j] = 'medium'
+          gridColors[i][j] = theme.colorMedium
         }
       }
     }
-    this.props.setGridColors(gridColors)
+    setGridColors(gridColors)
   }
 
   componentDidMount() {
-    this.initGridColors()
+    setTimeout(this._initGridColors)
+    setTimeout(createValidPath)
   }
 
   render() {
@@ -39,12 +48,16 @@ class Grid extends React.Component {
   }
 }
 
+const mapStateToProps = ({ grid: { gridColors } = {} }) => ({
+  gridColors
+})
+
 const mapDispatchToProps = {
   setGridColors
 }
 
 Grid = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(Grid)
 

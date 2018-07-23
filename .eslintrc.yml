@@ -21,3 +21,4 @@ rules:
     - unix
   'no-console': 0
   'no-class-assign': 0
+  'no-undef': 0 # this is a problem
